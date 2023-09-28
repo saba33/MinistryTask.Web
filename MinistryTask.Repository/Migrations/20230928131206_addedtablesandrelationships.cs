@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MinistryTask.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedEntityModelToDb : Migration
+    public partial class addedtablesandrelationships : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,39 @@ namespace MinistryTask.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductStatus",
+                columns: table => new
+                {
+                    ProductStatusId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductStatus", x => x.ProductStatusId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    IdNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -45,11 +78,18 @@ namespace MinistryTask.Repository.Migrations
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Publisher = table.Column<int>(type: "int", nullable: false),
                     NumberOfPages = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductStatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_ProductStatus_ProductStatusId",
+                        column: x => x.ProductStatusId,
+                        principalTable: "ProductStatus",
+                        principalColumn: "ProductStatusId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,6 +120,11 @@ namespace MinistryTask.Repository.Migrations
                 name: "IX_AuthorProduct_ProductsId",
                 table: "AuthorProduct",
                 column: "ProductsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ProductStatusId",
+                table: "Products",
+                column: "ProductStatusId");
         }
 
         /// <inheritdoc />
@@ -89,10 +134,16 @@ namespace MinistryTask.Repository.Migrations
                 name: "AuthorProduct");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Author");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "ProductStatus");
         }
     }
 }

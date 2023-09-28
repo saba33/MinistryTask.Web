@@ -12,8 +12,8 @@ using MinistryTask.Repository.DatabaseContext;
 namespace MinistryTask.Repository.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230927113537_AddedUserTableToDatabase")]
-    partial class AddedUserTableToDatabase
+    [Migration("20230928131206_addedtablesandrelationships")]
+    partial class addedtablesandrelationships
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,22 @@ namespace MinistryTask.Repository.Migrations
                     b.ToTable("Author");
                 });
 
+            modelBuilder.Entity("MinistryTask.Domain.Models.ProductStatus", b =>
+                {
+                    b.Property<int>("ProductStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductStatusId"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductStatusId");
+
+                    b.ToTable("ProductStatus");
+                });
+
             modelBuilder.Entity("MinistryTask.Domain.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -159,6 +175,9 @@ namespace MinistryTask.Repository.Migrations
                     b.Property<int>("NumberOfPages")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProductStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductType")
                         .HasColumnType("int");
 
@@ -169,6 +188,8 @@ namespace MinistryTask.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductStatusId");
 
                     b.ToTable("Products");
                 });
@@ -186,6 +207,22 @@ namespace MinistryTask.Repository.Migrations
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MinistryTask.Domain.Product", b =>
+                {
+                    b.HasOne("MinistryTask.Domain.Models.ProductStatus", "ProductStatus")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductStatus");
+                });
+
+            modelBuilder.Entity("MinistryTask.Domain.Models.ProductStatus", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

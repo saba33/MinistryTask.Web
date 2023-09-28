@@ -12,12 +12,14 @@ namespace MinistryTask.Domain
         [MaxLength(500), MinLength(100)]
         public string Annotation { get; set; }
         public ProductType ProductType { get; set; }
-        [MinLength(11), MaxLength(11)]
+        [MinLength(13), MaxLength(13)]
         public string ISBN { get; set; }
         public DateTime ReleaseDate { get; set; }
         public Publisher Publisher { get; set; }
         public int NumberOfPages { get; set; }
         public string Address { get; set; }
         public virtual ICollection<Author> Authors { get; set; }
+        public int ProductStatusId { get; set; }
+        public ProductStatus ProductStatus { get; set; }
     }
 }

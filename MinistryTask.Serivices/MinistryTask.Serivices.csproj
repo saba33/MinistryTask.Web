@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\ResposeModels\ProductResponseModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MinistryTask.Domain\MinistryTask.Domain.csproj" />
   </ItemGroup>
 

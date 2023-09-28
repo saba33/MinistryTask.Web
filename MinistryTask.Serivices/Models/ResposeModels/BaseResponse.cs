@@ -4,6 +4,6 @@
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }
-        public DateTime ActionDate { get; set; }
+        public DateTime ActionDate { get; set; } = DateTime.Now;
     }
 }

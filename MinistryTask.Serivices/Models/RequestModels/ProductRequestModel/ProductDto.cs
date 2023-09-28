@@ -10,7 +10,7 @@ namespace MinistryTask.Serivices.Models.RequestModels.ProductRequestModel
         [MaxLength(500), MinLength(100)]
         public string Annotation { get; set; }
         public ProductType ProductType { get; set; }
-        [MinLength(11), MaxLength(11)]
+        [MinLength(13), MaxLength(13)]
         public string ISBN { get; set; }
         public DateTime ReleaseDate { get; set; }
         public Publisher Publisher { get; set; }
